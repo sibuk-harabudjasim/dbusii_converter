@@ -31,11 +31,8 @@ class ParserFactory(object):
             config = json.loads(f.read())
 
         available_parsers = {p.name: p for p in self.registered_parsers}
-        for name, data in config.items():
-            parser_cls = available_parsers.get(name, None)
-            if not parser_cls:
-                continue
-            self.parsers[parser_cls.event_code] = parser_cls(data)
+        for parser_cls in self.registered_parsers:
+            self.parsers[parser_cls.event_code] = parser_cls(config.get(parser_cls.name, {}))
         if self.default_parser_cls:
             self.default_parser = self.default_parser_cls(None)
 
