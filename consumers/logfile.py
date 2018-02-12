@@ -19,6 +19,7 @@ class LogFileConsumer(BaseConsumer):
         if not in_:
             raise ValueError('"in" parameter must be specified for {}'.format(self.__class__.__name__))
         self.in_filename = in_
+        self.broken_lines = 0
 
     def __enter__(self):
         self.file = open(self.in_filename, 'r')
@@ -28,6 +29,8 @@ class LogFileConsumer(BaseConsumer):
         if self.file:
             self.file.close()
             self.file = None
+        if self.broken_lines:
+            print('LogFileConsumer warning: {} lines was not parsed.'.format(self.broken_lines))
 
     @staticmethod
     def _parse_line(line):
@@ -57,7 +60,11 @@ class LogFileConsumer(BaseConsumer):
                 continue
             if not line:
                 continue
-            new_data, is_ack = self._parse_line(line)
+            try:
+                new_data, is_ack = self._parse_line(line)
+            except:
+                self.broken_lines += 1
+                continue
             line_data.update(new_data)
             if is_ack:
                 yield log_entry(**line_data)
