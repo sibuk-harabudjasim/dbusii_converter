@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from consumers.logfile import LogFileConsumer
 from core.base.runner import BaseRunner
-from producers.stdout import StdoutProducer
+from producers import LogFileProducer
 
 
 class SimpleRunner(BaseRunner):
     name = 'simple'
     consumer = LogFileConsumer
-    producer = StdoutProducer
+    producer = LogFileProducer
 
 
 __author__ = 'manitou'
