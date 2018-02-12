@@ -26,20 +26,20 @@ if __name__ == '__main__':
         print('Error: no such runner \'{}\''.format(options.runner))
         exit(-1)
     runner = runner_cls(parser_factory)
-    custom_runner = options.consumer or options.producer
-    if custom_runner:
-        if options.consumer:
-            consumer = get_consumer(options.consumer)
-            if not consumer:
-                print('Error: no such consumer \'{}\''.format(options.consumer))
-                exit(-1)
-            runner.consumer = consumer
-        if options.producer:
-            producer = get_producer(options.producer)
-            if not producer:
-                print('Error: no such producer \'{}\''.format(options.producer))
-                exit(-1)
-            runner.producer = producer
+
+    if options.consumer:
+        consumer = get_consumer(options.consumer)
+        if not consumer:
+            print('Error: no such consumer \'{}\''.format(options.consumer))
+            exit(-1)
+        runner.consumer = consumer
+
+    producer_name = options.producer or ('logfile' if options.out else 'stdout')
+    producer = get_producer(producer_name)
+    if not producer:
+        print('Error: no such producer \'{}\''.format(producer_name))
+        exit(-1)
+    runner.producer = producer
 
     runner.run(options.in_, options.out)
 
