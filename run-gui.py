@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-import tkinter
-from tkinter.filedialog import LoadFileDialog, SaveFileDialog
+import wx
 
 from core.parser_factory import ParserFactory
 from runners import get_runner
@@ -8,29 +7,43 @@ from runners import get_runner
 CONFIG_FILE = './config.json'
 parser_factory = ParserFactory()
 parser_factory.init_parsers(CONFIG_FILE)
+app = wx.App()
+
+
+class DropTarget(wx.FileDropTarget):
+    def OnDropFiles(self, x, y, filenames):
+        for file in filenames:
+            out = get_output_file()
+            if not out:
+                return
+            run_conversion(file, out)
 
 
 def run_conversion(in_, out):
     '''Only for logfiles for now'''
     runner_cls = get_runner('simple')
     runner = runner_cls(parser_factory)
-    runner.run(in_, out)
-
-
-def get_input_file():
-    d = LoadFileDialog(root)
-    file = d.go('.', '*.log,*.txt')
-    if file == '':
-        return
-    return file
+    try:
+        runner.run(in_, out)
+    except Exception as e:
+        errorDlg = wx.MessageDialog(None, str(e), "Error", wx.OK)
+        errorDlg.ShowModal()
 
 
 def get_output_file():
-    d = SaveFileDialog(root)
-    file = d.go('.')
-    if file == '':
-        return
-    return file
+    with wx.FileDialog(None, "Save output log file",
+                       style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT) as fileDialog:
+        if fileDialog.ShowModal() == wx.ID_CANCEL:
+            return
+        return fileDialog.GetPath()
+
+
+def get_input_file():
+    with wx.FileDialog(None, "Open log file", wildcard="Log files (*.log)|*.log",
+                       style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST) as fileDialog:
+        if fileDialog.ShowModal() == wx.ID_CANCEL:
+            return
+        return fileDialog.GetPath()
 
 
 def on_drop(*args, **kwargs):
@@ -48,13 +61,13 @@ def on_open(event):
 
 
 if __name__ == '__main__':
-    root = tkinter.Tk()
-    root.resizable(0, 0)
-    root.geometry('{}x{}'.format(300, 200))
-    open_button = tkinter.Button(root, text='Open logfile')
-    open_button.bind("<Button-1>", on_open)
-    open_button.pack(fill=tkinter.BOTH, expand=1)
-    root.mainloop()
+    wnd = wx.Frame(None, wx.ID_ANY, "I'm the title")
+    open_button = wx.Button(wnd, wx.ID_ANY, 'Open file')
+    open_button.Bind(wx.EVT_BUTTON, on_open)
+    drop_target = DropTarget()
+    open_button.SetDropTarget(drop_target)
+    wnd.Show(True)
+    app.MainLoop()
 
 
 __author__ = 'manitou'
