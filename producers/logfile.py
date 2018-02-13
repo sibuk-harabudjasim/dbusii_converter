@@ -26,4 +26,22 @@ class LogFileProducer(BaseProducer):
         self.file.write(container.str() + '\n')
 
 
+class ReplacingLogFileProducer(LogFileProducer):
+    name = 'logfile_replace'
+    vfile = None
+
+    def __enter__(self):
+        self.vfile = ''
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.vfile:
+            file = open(self.out_filename, 'w')
+            file.write(self.vfile)
+            file.close()
+
+    def output(self, container):
+        self.vfile += container.str() + '\n'
+
+
 __author__ = 'manitou'

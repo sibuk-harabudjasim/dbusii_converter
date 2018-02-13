@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from .logfile import LogFileProducer
+from .logfile import LogFileProducer, ReplacingLogFileProducer
 from .stdout import StdoutProducer
 
 PRODUCERS = [
     LogFileProducer,
+    ReplacingLogFileProducer,
     StdoutProducer
 ]
 

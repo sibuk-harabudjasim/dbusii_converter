@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-from .simple_runner import SimpleRunner
+from .simple_runner import SimpleRunner, ReplaceRunner
 
 RUNNERS = [
-    SimpleRunner
+    SimpleRunner,
+    ReplaceRunner
 ]
 
 runners_map = {r.name: r for r in RUNNERS}
