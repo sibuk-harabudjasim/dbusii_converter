@@ -33,13 +33,17 @@ def get_output_file():
     return file
 
 
-def on_drop():
-    pass
+def on_drop(*args, **kwargs):
+    print('drop', args, kwargs)
 
 
 def on_open(event):
     in_ = get_input_file()
+    if not in_:
+        return
     out = get_output_file()
+    if not out:
+        return
     run_conversion(in_, out)
 
 
