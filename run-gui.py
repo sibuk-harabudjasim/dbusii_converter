@@ -59,7 +59,12 @@ class ConvFrame(wx.Frame):
         self.layout.Fit(self)
 
     def make_config(self, event):
-        pass
+        path = self.get_root_folder()
+        if path:
+            parser_factory.make_config(path, CONFIG_FILE)
+            parser_factory.init_parsers(CONFIG_FILE)
+            self.info('Config rebuilt.')
+
 
     def run_conversion(self, in_, out):
         '''Only for logfiles for now'''
@@ -87,6 +92,12 @@ class ConvFrame(wx.Frame):
             if fileDialog.ShowModal() == wx.ID_CANCEL:
                 return
             return fileDialog.GetPath()
+
+    def get_root_folder(self):
+        with wx.DirDialog(self, "Select project root", "") as dirDialog:
+            if dirDialog.ShowModal() == wx.ID_CANCEL:
+                return
+            return dirDialog.GetPath()
 
 
     def get_input_file(self):

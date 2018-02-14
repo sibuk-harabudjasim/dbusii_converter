@@ -1,5 +1,5 @@
 #!/bin/bash
 
-pyinstaller run.py -y
-cp config.json dist/run/
+pyinstaller -n dbus_conv -y --add-data "config.json;." -w run-gui.py
+
 
