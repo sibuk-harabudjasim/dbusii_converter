@@ -53,6 +53,20 @@ class BaseParser(object):
         raise NotImplementedError
 
 
+class StaticParser(BaseParser):
+    def _make_str(self, container):
+        return STR_TEMPLATE.format(**container.src_data._asdict())
+
+    def _make_json(self, container):
+        return container.src_data._asdict()
+
+    def load_data(self, root_path):
+        pass
+
+    def store_data(self):
+        return {}
+
+
 class MapEventParser(BaseParser):
     def __init__(self, data):
         super().__init__(data)

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import wx
 
+import traceback
 from core.parser_factory import ParserFactory
 from runners import get_runner
 
@@ -74,6 +75,7 @@ class ConvFrame(wx.Frame):
             runner.run(in_, out)
         except Exception as e:
             self.error(str(e))
+            traceback.print_exc()
         else:
             self.info('File converted.')
 

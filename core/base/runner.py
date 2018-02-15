@@ -19,7 +19,11 @@ class BaseRunner(object):
                 for entry in consumer.input():
                     parser = self.parser_factory.get(entry.id)
                     container = parser.process(entry)
-                    producer.output(container)
+                    try:
+                        producer.output(container)
+                    except Exception as e:
+                        print('Exception in row:', container.src_data)
+                        raise
 
 
 __author__ = 'manitou'
