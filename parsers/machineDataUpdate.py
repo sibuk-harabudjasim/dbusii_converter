@@ -46,6 +46,7 @@ MACHINE_DATA = {
     24: lambda data: 'WATER_QUANTITY={}'.format((data[0] << 8) + data[1])
 }
 
+
 class MachineDataUpdateParser(StaticParser):
     name = 'MSG_Machine_Data_Update'
     event_code = '1811'

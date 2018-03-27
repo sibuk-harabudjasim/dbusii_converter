@@ -12,6 +12,14 @@ from .systemSynchronizationBlock import SystemSynchronizationBlockParser
 from .sytemSynchronizationResponse import SystemSynchronizationResponseParser
 from .systemSetOUValues import SystemSetOUValuesParser
 from .machineDataUpdate import MachineDataUpdateParser
+from .HC import (
+    ProtocolVersionReadResponseParser,
+    ProtocolVersionReadRequestParser,
+    ComPongNotificationParser,
+    HaPingPostParser,
+    PingNotificationParser,
+    NetStateNotificationParser
+)
 
 
 def register_parsers(factory):
@@ -26,6 +34,14 @@ def register_parsers(factory):
     factory.register_parser(SystemSynchronizationResponseParser)
     factory.register_parser(SystemSetOUValuesParser)
     factory.register_parser(MachineDataUpdateParser)
+
+    # HC
+    factory.register_parser(ProtocolVersionReadResponseParser)
+    factory.register_parser(ProtocolVersionReadRequestParser)
+    factory.register_parser(ComPongNotificationParser)
+    factory.register_parser(HaPingPostParser)
+    factory.register_parser(PingNotificationParser)
+    factory.register_parser(NetStateNotificationParser)
 
     factory.register_default_parser(DefaultParser)
 

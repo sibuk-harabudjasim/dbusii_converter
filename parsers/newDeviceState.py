@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from core.base.parser import StaticParser
+from core.base.parser import StaticParser, WithMultipleParams
 from core.utils import parse_hexstring
 from core.base.parser import STR_TEMPLATE
 
@@ -11,7 +11,7 @@ DRY_TEMP = ['gentle', 'intensive', 'intensive_2']
 DRY_PTYPE = ['solo_wash', 'combined', 'solo_dry', '']
 
 
-class SetNewDeviceStateParser(StaticParser):
+class SetNewDeviceStateParser(StaticParser, WithMultipleParams):
     name = 'MSG_Set_New_Device_State'
     event_code = '1006'
 
@@ -52,21 +52,6 @@ class SetNewDeviceStateParser(StaticParser):
                 if len(data) > 11:
                     struct['UniqProgID'] = (data[11] << 8) + data[12]
         return struct
-
-    def _make_dict_str(self, data):
-        res = []
-        for key, val in data.items():
-            fmt = '{}({})' if isinstance(val, OrderedDict) else '{}={}'
-            res.append(fmt.format(key, self._make_val_str(val)))
-        return ', '.join(res)
-
-    def _make_val_str(self, val):
-        if isinstance(val, OrderedDict):
-            return self._make_dict_str(val)
-        elif isinstance(val, list):
-            return '[' + ', '.join([self._make_val_str(v) for v in val]) + ']'
-        else:
-            return str(val)
 
     def _make_str(self, container):
         data = parse_hexstring(container.src_data.data)

@@ -2,6 +2,8 @@
 
 # processes entry, return container or output string (several formats)
 # also have storage. have to be able to parse source, store and load data from storage
+from collections import OrderedDict
+
 from core.base.container import EventContainer
 from core.utils import parse_hexstring
 
@@ -65,6 +67,23 @@ class StaticParser(BaseParser):
 
     def store_data(self):
         return {}
+
+
+class WithMultipleParams(object):
+    def _make_dict_str(self, data):
+        res = []
+        for key, val in data.items():
+            fmt = '{}({})' if isinstance(val, OrderedDict) else '{}={}'
+            res.append(fmt.format(key, self._make_val_str(val)))
+        return ', '.join(res)
+
+    def _make_val_str(self, val):
+        if isinstance(val, OrderedDict):
+            return self._make_dict_str(val)
+        elif isinstance(val, list):
+            return '[' + ', '.join([self._make_val_str(v) for v in val]) + ']'
+        else:
+            return str(val)
 
 
 class MapEventParser(BaseParser):
