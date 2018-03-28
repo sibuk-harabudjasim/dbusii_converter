@@ -2,13 +2,13 @@
 import os
 import re
 
-from core.base.parser import MapEventParser
+from core.base.parser import MapBasedParser
 
 PUD_HEADER = 'OU_V4_CS1/app/UimoSrc/src/BL/09_SOFTWARE_UNITS/99_PUD_VAR2/06_PUD_V2_HEADER/PUD_V2_SpecificDistributorPU.h'
 # PUD_HEADER = 'PUD_V2_SpecificDistributorPU.h'
 
 
-class MachineEventParser(MapEventParser):
+class MachineBasedParser(MapBasedParser):
     name = 'MSG_Machine_Event'
     event_code = '1000'
 

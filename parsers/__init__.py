@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from .default import DefaultParser
-from .machineEvent import MachineEventParser
-from .OUEvent import OUEventParser
+from .machineEvent import MachineBasedParser
+from .OUEvent import OUBasedParser
 from .machineError import MachineErrorParser
 from .newDeviceState import SetNewDeviceStateParser
 from .setProgressStatus import SetProgressStatusParser
@@ -18,13 +18,15 @@ from .HC import (
     ComPongNotificationParser,
     HaPingPostParser,
     PingNotificationParser,
-    NetStateNotificationParser
+    NetStateNotificationParser,
+    UIDValueNotificationParser,
+    ConfigureUIDNotificationParser
 )
 
 
 def register_parsers(factory):
-    factory.register_parser(MachineEventParser)
-    factory.register_parser(OUEventParser)
+    factory.register_parser(MachineBasedParser)
+    factory.register_parser(OUBasedParser)
     factory.register_parser(MachineErrorParser)
     factory.register_parser(SetNewDeviceStateParser)
     factory.register_parser(SetProgressStatusParser)
@@ -42,6 +44,8 @@ def register_parsers(factory):
     factory.register_parser(HaPingPostParser)
     factory.register_parser(PingNotificationParser)
     factory.register_parser(NetStateNotificationParser)
+    factory.register_parser(UIDValueNotificationParser)
+    factory.register_parser(ConfigureUIDNotificationParser)
 
     factory.register_default_parser(DefaultParser)
 

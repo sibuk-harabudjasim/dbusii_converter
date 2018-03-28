@@ -86,7 +86,7 @@ class WithMultipleParams(object):
             return str(val)
 
 
-class MapEventParser(BaseParser):
+class MapBasedParser(BaseParser):
     def __init__(self, data):
         super().__init__(data)
         if self.data:
